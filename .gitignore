@@ -1,0 +1,17 @@
+node_modules/
+.next/
+.turbo/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+coverage/
+.flutter-plugins
+.flutter-plugins-dependencies
+mobile/.dart_tool/
+mobile/build/
+mobile/.packages
+
