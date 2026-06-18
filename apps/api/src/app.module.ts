@@ -14,7 +14,10 @@ import { FeedModule } from './modules/feed/feed.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { ReportsModule } from './modules/reports/reports.module';
 
+import { AppController } from './app.controller';
+
 @Module({
+  controllers: [AppController],
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({

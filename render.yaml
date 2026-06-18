@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: builder-review-api
+    runtime: docker
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: ./apps/api
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://chitboxdev_db_user:95bXXdVGpl6frPzN@cluster0.aqcjcp3.mongodb.net/?appName=Cluster0
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRY
+        value: 15m
+      - key: JWT_REFRESH_EXPIRY
+        value: 7d
+      - key: PORT
+        value: 4000
+      - key: FRONTEND_URL
+        value: https://builder-review.vercel.app
+      - key: NODE_ENV
+        value: production
