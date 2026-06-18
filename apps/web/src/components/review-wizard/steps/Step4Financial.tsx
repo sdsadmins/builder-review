@@ -14,7 +14,7 @@ function ToggleField({
   negativeLabel,
 }: {
   label: string;
-  icon: React.ElementType;
+  icon: React.ElementType<{size?: number; className?: string}>;
   desc: string;
   value: boolean;
   onChange: (v: boolean) => void;
