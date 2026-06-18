@@ -8,12 +8,11 @@ function Particles() {
   const meshRef = useRef<THREE.Points>(null);
 
   const { positions, colors } = useMemo(() => {
-    const count = 2000;
+    const count = 600;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
-      // Sphere formation
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       const radius = 3 + Math.random() * 4;
@@ -22,12 +21,21 @@ function Particles() {
       positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = radius * Math.cos(phi);
 
-      // Amber/gold color with variation
-      const intensity = 0.6 + Math.random() * 0.4;
-      colors[i * 3] = intensity;           // R - warm
-      colors[i * 3 + 1] = intensity * 0.6; // G - amber
-      colors[i * 3 + 2] = 0;              // B - none
+      // Mix of stone/navy and amber particles
+      const isAmber = Math.random() > 0.5;
+      if (isAmber) {
+        // Amber: #C8973A at opacity ~0.2
+        colors[i * 3] = 0.784;      // R 200/255
+        colors[i * 3 + 1] = 0.592;  // G 151/255
+        colors[i * 3 + 2] = 0.227;  // B  58/255
+      } else {
+        // Stone/navy: #1A1A2E at opacity ~0.15 (scaled brightness)
+        colors[i * 3] = 0.1;        // R
+        colors[i * 3 + 1] = 0.1;    // G
+        colors[i * 3 + 2] = 0.18;   // B
+      }
     }
+
     return { positions, colors };
   }, []);
 
@@ -51,10 +59,10 @@ function Particles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.025}
+        size={0.04}
         vertexColors
         transparent
-        opacity={0.8}
+        opacity={0.5}
         sizeAttenuation
       />
     </points>

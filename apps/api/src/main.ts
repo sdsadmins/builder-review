@@ -27,7 +27,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   const config = new DocumentBuilder()
-    .setTitle('BuilderReview API 🏗️')
+    .setTitle('BuilderReview API')
     .setDescription('Real estate review and transparency platform API')
     .setVersion('1.0')
     .addBearerAuth()
@@ -37,7 +37,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 4000;
   await app.listen(port);
-  console.log(`🚀 BuilderReview API running on port ${port}`);
-  console.log(`📚 Swagger: http://localhost:${port}/api/docs`);
+  console.log(`BuilderReview API running on port ${port}`);
+  console.log(`Swagger: http://localhost:${port}/api/docs`);
 }
 bootstrap();

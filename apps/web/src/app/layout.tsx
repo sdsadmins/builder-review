@@ -1,56 +1,31 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "sonner";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import type { Metadata } from 'next'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
+import { Toaster } from 'sonner'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "BuilderReview 🏗️ — Real Builders. Real Reviews. Real Transparency.",
-  description:
-    "India's most trusted platform for real estate builder reviews. Verified reviews, RERA compliance, and rewards for homebuyers.",
-  keywords: ["builder review", "real estate", "RERA", "homebuyer", "India"],
-  openGraph: {
-    title: "BuilderReview — Real Estate Transparency",
-    description: "50,000+ verified reviews from real homebuyers",
-    type: "website",
-  },
-};
+  title: 'BuilderReview - Real Builders. Real Reviews. Real Transparency.',
+  description: 'India\'s most trusted real estate review platform. 50,000+ verified reviews from homebuyers.',
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
-    >
-      <body
-        className="min-h-full flex flex-col"
-        style={{ backgroundColor: "#0A0A0F", color: "#F8F8FF" }}
-      >
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} h-full`}>
+      <body style={{ backgroundColor: '#FAF9F6', color: '#1A1A2E' }} className="h-full antialiased">
         {children}
         <Toaster
-          theme="dark"
+          theme="light"
+          position="top-right"
           toastOptions={{
             style: {
-              background: "#12121A",
-              border: "1px solid rgba(245,158,11,0.3)",
-              color: "#F8F8FF",
+              background: '#FFFFFF',
+              border: '1px solid #E2DDD6',
+              color: '#1A1A2E',
             },
           }}
         />
       </body>
     </html>
-  );
+  )
 }

@@ -1,204 +1,153 @@
-'use client';
+'use client'
+import { useState } from 'react'
+import { User, Phone, FileText, Bell, Lock, Camera, Save, CheckCircle, Star, Mail } from 'lucide-react'
+import { toast } from 'sonner'
+import StarRating from '@/components/shared/StarRating'
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import GlassCard from '@/components/shared/GlassCard';
-import StarRating from '@/components/shared/StarRating';
-import { Camera, Save, Lock, Bell, Eye, EyeOff } from 'lucide-react';
-import { toast } from 'sonner';
+const REVIEWS = [
+  { builder: 'Prestige Group', rating: 4.5, date: 'Jan 2026', status: 'Approved' },
+  { builder: 'Sobha Limited', rating: 4.0, date: 'Dec 2025', status: 'Approved' },
+]
 
-const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-const fadeUp = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
-
-const inputStyle = {
-  background: 'rgba(255,255,255,0.06)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  color: '#F8F8FF',
-  borderRadius: '12px',
-  padding: '10px 14px',
-  fontSize: '14px',
-  width: '100%',
-  outline: 'none',
-};
+const NOTIF_LABELS: Record<string, string> = {
+  email: 'Email Notifications',
+  sms: 'SMS Notifications',
+  rewards: 'Reward Alerts',
+  reviews: 'Review Updates',
+}
 
 export default function ProfilePage() {
-  const [form, setForm] = useState({ name: 'Rahul Mehta', phone: '+91 98765 43210', bio: 'Homebuyer and reviewer at BuilderReview. Purchased in Bangalore.' });
-  const [showPw, setShowPw] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [notifications, setNotifications] = useState({ email: true, sms: false, rewards: true, reviews: true });
+  const [name, setName] = useState('Alex Sharma')
+  const [phone, setPhone] = useState('+91 98765 43210')
+  const [bio, setBio] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [notifs, setNotifs] = useState({ email: true, sms: false, rewards: true, reviews: true })
 
-  const handleSave = async () => {
-    setSaving(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    toast.success('✅ Profile updated successfully!');
-    setSaving(false);
-  };
-
-  const reviews = [
-    { builder: 'Prestige Group', rating: 4.5, date: 'Jan 2026', status: '✅ Approved' },
-    { builder: 'Sobha Limited', rating: 4.0, date: 'Dec 2025', status: '✅ Approved' },
-  ];
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    await new Promise(r => setTimeout(r, 800))
+    setSaving(false)
+    toast.success('Profile updated successfully!')
+  }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <motion.div initial="hidden" animate="visible" variants={stagger}>
-        <motion.h1 variants={fadeUp} className="text-3xl font-black text-white mb-8">
-          👤 Your Profile
-        </motion.h1>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Avatar + Summary */}
-          <motion.div variants={fadeUp}>
-            <GlassCard className="p-6 text-center">
-              <div className="relative inline-block mb-4">
-                <div className="w-24 h-24 rounded-full bg-amber-500 flex items-center justify-center text-4xl font-black text-black mx-auto">
-                  R
-                </div>
-                <button
-                  className="absolute bottom-0 right-0 w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{ background: 'linear-gradient(135deg, #F59E0B, #D97706)' }}
-                >
-                  <Camera size={14} style={{ color: '#0A0A0F' }} />
-                </button>
-              </div>
-              <h2 className="text-white font-bold text-lg">{form.name}</h2>
-              <p className="text-white/50 text-sm">rahul@example.com</p>
-              <div className="mt-4 pt-4 border-t border-white/8 grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <p className="text-xl font-black text-amber-400">2</p>
-                  <p className="text-xs text-white/40">Reviews</p>
-                </div>
-                <div>
-                  <p className="text-xl font-black text-amber-400">₹500</p>
-                  <p className="text-xs text-white/40">Earned</p>
-                </div>
-                <div>
-                  <p className="text-xl font-black text-amber-400">4.8</p>
-                  <p className="text-xs text-white/40">Impact</p>
-                </div>
-              </div>
-            </GlassCard>
-          </motion.div>
-
-          {/* Edit Profile */}
-          <motion.div variants={fadeUp} className="lg:col-span-2 space-y-4">
-            <GlassCard className="p-6">
-              <h3 className="text-white font-bold mb-5">✏️ Edit Profile</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-white/60 mb-2">👤 Full Name</label>
-                  <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={inputStyle} />
-                </div>
-                <div>
-                  <label className="block text-sm text-white/60 mb-2">📱 Phone Number</label>
-                  <input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} style={inputStyle} />
-                </div>
-                <div>
-                  <label className="block text-sm text-white/60 mb-2">📝 Bio</label>
-                  <textarea rows={3} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} className="resize-none" style={inputStyle} />
-                </div>
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all"
-                  style={{ background: 'linear-gradient(135deg, #F59E0B, #D97706)', color: '#0A0A0F' }}
-                >
-                  <Save size={14} />
-                  {saving ? 'Saving...' : '💾 Save Changes'}
-                </button>
-              </div>
-            </GlassCard>
-
-            {/* Change Password */}
-            <GlassCard className="p-6">
-              <h3 className="text-white font-bold mb-5 flex items-center gap-2">
-                <Lock size={16} className="text-amber-500" />
-                🔒 Change Password
-              </h3>
-              <div className="space-y-3">
-                {['Current Password', 'New Password', 'Confirm New Password'].map((label) => (
-                  <div key={label}>
-                    <label className="block text-sm text-white/60 mb-2">{label}</label>
-                    <div className="relative">
-                      <input
-                        type={showPw ? 'text' : 'password'}
-                        placeholder="••••••••"
-                        style={inputStyle}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPw(!showPw)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30"
-                      >
-                        {showPw ? <EyeOff size={14} /> : <Eye size={14} />}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  className="px-5 py-2.5 rounded-xl text-sm font-medium border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-all"
-                >
-                  Update Password
-                </button>
-              </div>
-            </GlassCard>
-
-            {/* Notifications */}
-            <GlassCard className="p-6">
-              <h3 className="text-white font-bold mb-5 flex items-center gap-2">
-                <Bell size={16} className="text-amber-500" />
-                🔔 Notifications
-              </h3>
-              <div className="space-y-3">
-                {Object.entries(notifications).map(([key, value]) => {
-                  const labels: Record<string, string> = { email: '📧 Email Notifications', sms: '📱 SMS Notifications', rewards: '🎁 Reward Alerts', reviews: '📝 Review Updates' };
-                  return (
-                    <div key={key} className="flex items-center justify-between py-2">
-                      <span className="text-sm text-white/70">{labels[key]}</span>
-                      <button
-                        onClick={() => setNotifications({ ...notifications, [key]: !value })}
-                        className="w-12 h-6 rounded-full relative transition-all"
-                        style={{ background: value ? '#F59E0B' : 'rgba(255,255,255,0.1)' }}
-                      >
-                        <div
-                          className="absolute top-1 w-4 h-4 bg-white rounded-full transition-all"
-                          style={{ left: value ? '28px' : '4px' }}
-                        />
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </GlassCard>
-          </motion.div>
+    <div className="bg-stone-50 min-h-screen p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center gap-3 mb-8">
+          <User size={22} className="text-amber-700" />
+          <h1 className="text-2xl font-bold text-stone-900">Your Profile</h1>
         </div>
 
-        {/* Review History */}
-        <motion.div variants={fadeUp} className="mt-6">
-          <h3 className="text-white font-bold mb-4">📝 My Reviews</h3>
-          <GlassCard className="overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                  {['Builder', 'Rating', 'Date', 'Status'].map((h) => (
-                    <th key={h} className="px-6 py-3 text-left text-xs text-white/40 uppercase">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {reviews.map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <td className="px-6 py-4 text-sm text-white/80">{r.builder}</td>
-                    <td className="px-6 py-4"><StarRating value={r.rating} size="sm" showValue /></td>
-                    <td className="px-6 py-4 text-sm text-white/50">{r.date}</td>
-                    <td className="px-6 py-4 text-sm text-green-400">{r.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </GlassCard>
-        </motion.div>
-      </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Avatar */}
+          <div className="bg-white border border-stone-200 rounded-2xl shadow-sm p-6 text-center">
+            <div className="relative w-24 h-24 mx-auto mb-4">
+              <div className="w-24 h-24 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-4xl font-black">A</div>
+              <button className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-amber-700 flex items-center justify-center shadow-md hover:bg-amber-800 transition-colors">
+                <Camera size={14} className="text-white" />
+              </button>
+            </div>
+            <p className="font-bold text-stone-900 text-lg">{name}</p>
+            <p className="text-stone-500 text-sm mt-1">Verified Member</p>
+            <div className="mt-4 flex items-center justify-center gap-1.5">
+              <CheckCircle size={14} className="text-green-600" />
+              <span className="text-green-600 text-xs font-medium">Identity Verified</span>
+            </div>
+          </div>
+
+          {/* Edit form */}
+          <div className="lg:col-span-2 bg-white border border-stone-200 rounded-2xl shadow-sm p-6">
+            <h3 className="font-bold text-stone-900 mb-5 flex items-center gap-2">
+              <FileText size={16} className="text-amber-700" /> Edit Profile
+            </h3>
+            <form onSubmit={handleSave} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1.5 flex items-center gap-1.5">
+                  <User size={13} className="text-stone-400" /> Full Name
+                </label>
+                <input value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-2.5 border border-stone-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1.5 flex items-center gap-1.5">
+                  <Phone size={13} className="text-stone-400" /> Phone Number
+                </label>
+                <input value={phone} onChange={e => setPhone(e.target.value)} className="w-full px-4 py-2.5 border border-stone-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-1.5 flex items-center gap-1.5">
+                  <FileText size={13} className="text-stone-400" /> Bio
+                </label>
+                <textarea value={bio} onChange={e => setBio(e.target.value)} rows={3} placeholder="A bit about yourself..." className="w-full px-4 py-2.5 border border-stone-300 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+              </div>
+              <button type="submit" disabled={saving} className="flex items-center gap-2 px-6 py-2.5 bg-amber-700 hover:bg-amber-800 text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-60">
+                <Save size={15} className="text-white" /> {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </form>
+          </div>
+
+          {/* Security */}
+          <div className="bg-white border border-stone-200 rounded-2xl shadow-sm p-6">
+            <h3 className="font-bold text-stone-900 mb-4 flex items-center gap-2">
+              <Lock size={16} className="text-amber-700" /> Change Password
+            </h3>
+            <div className="space-y-3">
+              {['Current Password', 'New Password', 'Confirm Password'].map(label => (
+                <div key={label}>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">{label}</label>
+                  <input type="password" placeholder="••••••••" className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+                </div>
+              ))}
+              <button className="w-full py-2 bg-amber-700 text-white rounded-lg text-sm font-semibold hover:bg-amber-800 transition-colors mt-2">
+                Update Password
+              </button>
+            </div>
+          </div>
+
+          {/* Notifications */}
+          <div className="bg-white border border-stone-200 rounded-2xl shadow-sm p-6">
+            <h3 className="font-bold text-stone-900 mb-4 flex items-center gap-2">
+              <Bell size={16} className="text-amber-700" /> Notifications
+            </h3>
+            <div className="space-y-3">
+              {Object.entries(notifs).map(([key, val]) => (
+                <label key={key} className="flex items-center justify-between cursor-pointer">
+                  <span className="text-sm text-stone-700">{NOTIF_LABELS[key]}</span>
+                  <div
+                    onClick={() => setNotifs(n => ({ ...n, [key]: !n[key as keyof typeof n] }))}
+                    className={`w-10 h-5 rounded-full relative transition-colors ${val ? 'bg-amber-700' : 'bg-stone-300'}`}
+                  >
+                    <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${val ? 'translate-x-5' : 'translate-x-0.5'}`} />
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* My Reviews */}
+          <div className="lg:col-span-3 bg-white border border-stone-200 rounded-2xl shadow-sm p-6">
+            <h3 className="font-bold text-stone-900 mb-4 flex items-center gap-2">
+              <Star size={16} className="text-amber-700" /> My Reviews
+            </h3>
+            <div className="divide-y divide-stone-100">
+              {REVIEWS.map(r => (
+                <div key={r.builder} className="flex items-center justify-between py-3">
+                  <div>
+                    <p className="font-medium text-stone-900">{r.builder}</p>
+                    <p className="text-xs text-stone-400">{r.date}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <StarRating rating={r.rating} size="sm" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                      <CheckCircle size={11} className="text-green-600" /> {r.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  );
+  )
 }

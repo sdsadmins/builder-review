@@ -31,7 +31,7 @@ export default function NewReviewClient() {
 
   const handleSubmit = async () => {
     await new Promise((r) => setTimeout(r, 1500));
-    toast.success('🚀 Review submitted successfully! You\'ll earn ₹250 once approved.');
+    toast.success('Review submitted! You\'ll earn rewards once it is approved.');
     reset();
     router.push('/dashboard');
   };

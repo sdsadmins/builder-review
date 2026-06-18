@@ -1,78 +1,50 @@
-'use client';
+'use client'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LayoutDashboard, PenLine, FileText, Gift, User, Building2, LogOut } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
-
-const sidebarLinks = [
-  { href: '/dashboard', label: 'Dashboard', emoji: '🏠' },
-  { href: '/review/new', label: 'Write Review', emoji: '✍️' },
-  { href: '/reviews', label: 'My Reviews', emoji: '📝' },
-  { href: '/rewards', label: 'Rewards', emoji: '🎁' },
-  { href: '/profile', label: 'Profile', emoji: '👤' },
-];
+const links = [
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/review/new', label: 'Write Review', icon: PenLine },
+  { href: '/my-reviews', label: 'My Reviews', icon: FileText },
+  { href: '/rewards', label: 'Rewards', icon: Gift },
+  { href: '/profile', label: 'Profile', icon: User },
+]
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
+  const pathname = usePathname()
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: '#0A0A0F' }}>
-      {/* Sidebar */}
-      <aside
-        className="hidden md:flex flex-col w-64 min-h-screen sticky top-0 border-r border-white/8 flex-shrink-0"
-        style={{ background: '#0F0F1A' }}
-      >
-        {/* Logo */}
-        <div className="px-6 py-6 border-b border-white/8">
+    <div className="min-h-screen flex bg-stone-50">
+      <aside className="hidden md:flex flex-col w-64 min-h-screen bg-white border-r border-stone-200 flex-shrink-0">
+        <div className="px-6 py-5 border-b border-stone-200">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🏗️</span>
-            <span className="font-bold text-lg">
-              <span className="text-amber-400">Builder</span>
-              <span className="text-white">Review</span>
-            </span>
+            <Building2 size={20} className="text-amber-700" />
+            <span className="font-bold text-base"><span className="text-amber-700">Builder</span><span className="text-stone-900">Review</span></span>
           </Link>
         </div>
-
-        {/* Nav */}
-        <nav className="flex-1 p-4 space-y-1">
-          {sidebarLinks.map((link) => {
-            const active = pathname === link.href || pathname?.startsWith(link.href + '/');
+        <nav className="flex-1 p-3 space-y-0.5">
+          {links.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href
             return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all',
-                  active
-                    ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20'
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                )}
-              >
-                <span className="text-lg">{link.emoji}</span>
-                {link.label}
+              <Link key={href} href={href} className={cn('flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all', active ? 'bg-amber-50 text-amber-700 border-l-2 border-amber-700 pl-[10px]' : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50')}>
+                <Icon size={17} className={active ? 'text-amber-700' : 'text-stone-400'} />
+                {label}
               </Link>
-            );
+            )
           })}
         </nav>
-
-        {/* User Info */}
-        <div className="p-4 border-t border-white/8">
-          <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/5">
-            <div className="w-9 h-9 rounded-full bg-amber-500 flex items-center justify-center text-black font-bold">
-              R
-            </div>
+        <div className="p-3 border-t border-stone-200">
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 cursor-pointer">
+            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-sm font-bold">U</div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">Rahul Mehta</p>
-              <p className="text-xs text-white/40 truncate">rahul@example.com</p>
+              <p className="text-sm font-medium text-stone-900 truncate">My Account</p>
             </div>
+            <LogOut size={16} className="text-stone-400 hover:text-amber-700" />
           </div>
         </div>
       </aside>
-
-      {/* Main content */}
-      <main className="flex-1 overflow-auto">
-        {children}
-      </main>
+      <main className="flex-1 overflow-auto">{children}</main>
     </div>
-  );
+  )
 }

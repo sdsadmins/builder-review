@@ -1,138 +1,54 @@
-import Link from 'next/link';
+import Link from 'next/link'
+import { Building2, Twitter, Linkedin, Instagram } from 'lucide-react'
 
-const companyLinks = [
-  { href: '/about', label: 'About Us' },
-  { href: '/careers', label: 'Careers' },
-  { href: '/press', label: 'Press' },
-  { href: '/contact', label: 'Contact' },
-];
-
-const platformLinks = [
-  { href: '/builders', label: '🏢 Builders' },
-  { href: '/vendors', label: '🔧 Vendors' },
-  { href: '/feed', label: '🌟 Community Feed' },
-  { href: '/review/new', label: '✍️ Write a Review' },
-  { href: '/rewards', label: '🎁 Rewards' },
-];
-
-const legalLinks = [
-  { href: '/privacy', label: 'Privacy Policy' },
-  { href: '/terms', label: 'Terms of Service' },
-  { href: '/rera', label: 'RERA Guidelines' },
-  { href: '/disclaimer', label: 'Disclaimer' },
-];
+const sections = [
+  { title: 'Platform', links: [{ label: 'Builders', href: '/builders' }, { label: 'Vendors', href: '/vendors' }, { label: 'Reviews', href: '/feed' }, { label: 'Write a Review', href: '/review/new' }] },
+  { title: 'Company', links: [{ label: 'About Us', href: '/about' }, { label: 'Careers', href: '/careers' }, { label: 'Press', href: '/press' }, { label: 'Contact', href: '/contact' }] },
+  { title: 'Legal', links: [{ label: 'Privacy Policy', href: '/privacy' }, { label: 'Terms of Service', href: '/terms' }, { label: 'Cookie Policy', href: '/cookies' }, { label: 'Disclaimer', href: '/disclaimer' }] },
+]
 
 export default function Footer() {
   return (
-    <footer
-      className="border-t border-white/10 mt-auto"
-      style={{ background: '#0A0A0F' }}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          {/* Brand */}
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-3xl">🏗️</span>
-              <span className="font-bold text-xl">
-                <span className="text-amber-400">Builder</span>
-                <span className="text-white">Review</span>
+    <footer className="bg-stone-900 text-stone-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          <div>
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <Building2 size={22} className="text-amber-500" />
+              <span className="font-bold text-lg">
+                <span className="text-amber-500">Builder</span>
+                <span className="text-stone-100">Review</span>
               </span>
-            </div>
-            <p className="text-white/50 text-sm leading-relaxed mb-6">
-              India&apos;s most trusted platform for real estate builder reviews. Real
-              homebuyers, verified experiences, total transparency.
+            </Link>
+            <p className="text-sm leading-relaxed text-stone-400 mb-6">
+              India's most trusted real estate review platform. Verified reviews from real homebuyers.
             </p>
-            {/* Social Links */}
-            <div className="flex items-center gap-3">
-              {['𝕏', 'in', 'f', '▶'].map((icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-9 h-9 rounded-lg border border-white/10 flex items-center justify-center text-xs font-bold text-white/50 hover:text-amber-400 hover:border-amber-500/30 transition-all"
-                >
-                  {icon}
+            <div className="flex gap-3">
+              {[Twitter, Linkedin, Instagram].map((Icon, i) => (
+                <a key={i} href="#" className="w-9 h-9 rounded-lg bg-stone-800 flex items-center justify-center hover:bg-amber-700 transition-colors group">
+                  <Icon size={16} className="text-stone-400 group-hover:text-white" />
                 </a>
               ))}
             </div>
           </div>
-
-          {/* Company */}
-          <div>
-            <h4 className="text-sm font-semibold text-white/90 mb-4 uppercase tracking-wider">
-              🏢 Company
-            </h4>
-            <ul className="space-y-3">
-              {companyLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-white/50 text-sm hover:text-amber-400 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Platform */}
-          <div>
-            <h4 className="text-sm font-semibold text-white/90 mb-4 uppercase tracking-wider">
-              🚀 Platform
-            </h4>
-            <ul className="space-y-3">
-              {platformLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-white/50 text-sm hover:text-amber-400 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-sm font-semibold text-white/90 mb-4 uppercase tracking-wider">
-              ⚖️ Legal
-            </h4>
-            <ul className="space-y-3">
-              {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-white/50 text-sm hover:text-amber-400 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            {/* RERA Badge */}
-            <div className="mt-6 inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-green-500/20 bg-green-500/5">
-              <span className="text-green-400 text-xs">✅ RERA Compliant</span>
+          {sections.map(({ title, links }) => (
+            <div key={title}>
+              <h4 className="text-stone-100 font-semibold text-sm mb-4">{title}</h4>
+              <ul className="space-y-2.5">
+                {links.map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href} className="text-sm text-stone-400 hover:text-amber-400 transition-colors">{label}</Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+          ))}
         </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/40 text-sm">
-            © 2026 BuilderReview 🏗️. All rights reserved. Made with ❤️ for Indian homebuyers.
-          </p>
-          <div className="flex items-center gap-4 text-white/40 text-xs">
-            <span>🔒 SSL Secured</span>
-            <span>•</span>
-            <span>🇮🇳 Made in India</span>
-            <span>•</span>
-            <span>✅ RERA Registered</span>
-          </div>
+        <div className="border-t border-stone-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-stone-500">© 2025 BuilderReview Technologies Pvt. Ltd. All rights reserved.</p>
+          <p className="text-xs text-stone-600">Making real estate transparent, one review at a time.</p>
         </div>
       </div>
     </footer>
-  );
+  )
 }

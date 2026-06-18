@@ -1,101 +1,44 @@
-'use client';
-
-import { useState } from 'react';
-import { Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
+'use client'
 
 interface StarRatingProps {
-  value: number;
-  onChange?: (value: number) => void;
-  max?: number;
-  size?: 'sm' | 'md' | 'lg';
-  interactive?: boolean;
-  showValue?: boolean;
+  rating: number
+  max?: number
+  interactive?: boolean
+  onChange?: (rating: number) => void
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export default function StarRating({
-  value,
-  onChange,
-  max = 5,
-  size = 'md',
-  interactive = false,
-  showValue = false,
-}: StarRatingProps) {
-  const [hovered, setHovered] = useState(0);
-
-  const sizeClasses = {
-    sm: 'size-3.5',
-    md: 'size-5',
-    lg: 'size-7',
-  };
-
-  const textClasses = {
-    sm: 'text-xs',
-    md: 'text-sm',
-    lg: 'text-base',
-  };
+export default function StarRating({ rating, max = 5, interactive = false, onChange, size = 'md' }: StarRatingProps) {
+  const sizeMap = { sm: 14, md: 18, lg: 24 }
+  const px = sizeMap[size]
 
   return (
-    <div className="flex items-center gap-1">
-      <div
-        className="flex items-center gap-0.5"
-        onMouseLeave={() => interactive && setHovered(0)}
-      >
-        {Array.from({ length: max }).map((_, i) => {
-          const starValue = i + 1;
-          const halfValue = i + 0.5;
-          const displayValue = interactive && hovered > 0 ? hovered : value;
-          const isFull = displayValue >= starValue;
-          const isHalf = !isFull && displayValue >= halfValue;
-
-          return (
-            <button
-              key={i}
-              type="button"
-              disabled={!interactive}
-              onClick={() => interactive && onChange?.(starValue)}
-              onMouseEnter={() => interactive && setHovered(starValue)}
-              className={cn(
-                'relative transition-transform',
-                interactive && 'cursor-pointer hover:scale-110'
-              )}
-            >
-              {isHalf ? (
-                <span className="relative inline-block">
-                  <Star
-                    className={cn(sizeClasses[size], 'text-white/20 fill-white/20')}
-                  />
-                  <span
-                    className="absolute inset-0 overflow-hidden"
-                    style={{ width: '50%' }}
-                  >
-                    <Star
-                      className={cn(
-                        sizeClasses[size],
-                        'text-amber-500 fill-amber-500'
-                      )}
-                    />
-                  </span>
-                </span>
-              ) : (
-                <Star
-                  className={cn(
-                    sizeClasses[size],
-                    isFull
-                      ? 'text-amber-500 fill-amber-500'
-                      : 'text-white/20 fill-white/20'
-                  )}
-                />
-              )}
-            </button>
-          );
-        })}
-      </div>
-      {showValue && (
-        <span className={cn(textClasses[size], 'text-amber-400 font-semibold ml-1')}>
-          {value.toFixed(1)}
-        </span>
-      )}
+    <div className="flex items-center gap-0.5">
+      {Array.from({ length: max }, (_, i) => {
+        const filled = i < Math.floor(rating)
+        const half = !filled && i < rating
+        return (
+          <svg
+            key={i}
+            width={px}
+            height={px}
+            viewBox="0 0 24 24"
+            fill={filled ? 'currentColor' : half ? 'url(#half)' : 'none'}
+            stroke="currentColor"
+            strokeWidth={1.5}
+            className={`${filled || half ? 'text-amber-600' : 'text-stone-300'} ${interactive ? 'cursor-pointer hover:text-amber-500 transition-colors' : ''}`}
+            onClick={() => interactive && onChange?.(i + 1)}
+          >
+            <defs>
+              <linearGradient id="half" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="50%" stopColor="currentColor"/>
+                <stop offset="50%" stopColor="transparent"/>
+              </linearGradient>
+            </defs>
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        )
+      })}
     </div>
-  );
+  )
 }

@@ -4,7 +4,7 @@ import { Controller, Get } from '@nestjs/common';
 export class AppController {
   @Get()
   getRoot() {
-    return { name: 'BuilderReview API 🏗️', status: 'running', version: '1.0.0' };
+    return { name: 'BuilderReview API', status: 'running', version: '1.0.0' };
   }
 
   @Get('health')
