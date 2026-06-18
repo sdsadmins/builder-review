@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Building2, Twitter, Linkedin, Instagram } from 'lucide-react'
+import { Building2, Twitter, Linkedin, Globe } from 'lucide-react'
 
 const sections = [
   { title: 'Platform', links: [{ label: 'Builders', href: '/builders' }, { label: 'Vendors', href: '/vendors' }, { label: 'Reviews', href: '/feed' }, { label: 'Write a Review', href: '/review/new' }] },
@@ -24,7 +24,7 @@ export default function Footer() {
               India's most trusted real estate review platform. Verified reviews from real homebuyers.
             </p>
             <div className="flex gap-3">
-              {[Twitter, Linkedin, Instagram].map((Icon, i) => (
+              {[Twitter, Linkedin, Globe].map((Icon, i) => (
                 <a key={i} href="#" className="w-9 h-9 rounded-lg bg-stone-800 flex items-center justify-center hover:bg-amber-700 transition-colors group">
                   <Icon size={16} className="text-stone-400 group-hover:text-white" />
                 </a>

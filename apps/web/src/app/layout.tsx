@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { Inter } from 'next/font/google'
 import { Toaster } from 'sonner'
 import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-geist-sans',
+})
 
 export const metadata: Metadata = {
   title: 'BuilderReview - Real Builders. Real Reviews. Real Transparency.',
@@ -11,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} h-full`}>
+    <html lang="en" className={`${inter.variable} h-full`}>
       <body style={{ backgroundColor: '#FAF9F6', color: '#1A1A2E' }} className="h-full antialiased">
         {children}
         <Toaster
