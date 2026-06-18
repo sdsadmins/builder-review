@@ -172,24 +172,24 @@ export default function BuilderProfilePage() {
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { icon: MessageSquare, value: builder.reviews.toLocaleString(), label: 'Total Reviews' },
-                  { icon: StarRating, value: builder.rating.toFixed(1), label: 'Avg Rating' },
-                  { icon: Building2, value: builder.projects, label: 'Projects' },
+                  { icon: Building2, value: String(builder.projects), label: 'Projects' },
                   { icon: CheckCircle, value: '96%', label: 'RERA Compliance' },
                 ].map(({ icon: Icon, value, label }) => (
                   <div key={label} className="bg-white border border-stone-200 rounded-2xl p-5 text-center shadow-sm">
-                    {label === 'Avg Rating' ? (
-                      <div className="flex justify-center mb-2">
-                        <StarRating value={Number(value)} size="sm" />
-                      </div>
-                    ) : (
-                      <div className="flex justify-center mb-2">
-                        <Icon size={20} className="text-amber-700" />
-                      </div>
-                    )}
+                    <div className="flex justify-center mb-2">
+                      <Icon size={20} className="text-amber-700" />
+                    </div>
                     <div className="text-2xl font-black text-amber-700 mb-1">{value}</div>
                     <div className="text-xs text-stone-500">{label}</div>
                   </div>
                 ))}
+                <div className="bg-white border border-stone-200 rounded-2xl p-5 text-center shadow-sm">
+                  <div className="flex justify-center mb-2">
+                    <StarRating value={builder.rating} size="sm" />
+                  </div>
+                  <div className="text-2xl font-black text-amber-700 mb-1">{builder.rating.toFixed(1)}</div>
+                  <div className="text-xs text-stone-500">Avg Rating</div>
+                </div>
               </div>
             </div>
           )}
