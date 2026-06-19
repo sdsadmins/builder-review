@@ -1,7 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { LayoutDashboard, PenLine, FileText, Gift, User, Building2, LogOut } from 'lucide-react'
+import { signOut, useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 
 const links = [
@@ -14,6 +15,16 @@ const links = [
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const { data: session } = useSession()
+  const name = session?.user?.name ?? 'My Account'
+  const initial = name.charAt(0).toUpperCase()
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false })
+    router.push('/login')
+  }
+
   return (
     <div className="min-h-screen flex bg-stone-50">
       <aside className="hidden md:flex flex-col w-64 min-h-screen bg-white border-r border-stone-200 flex-shrink-0">
@@ -35,10 +46,10 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
           })}
         </nav>
         <div className="p-3 border-t border-stone-200">
-          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 cursor-pointer">
-            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-sm font-bold">U</div>
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 cursor-pointer" onClick={handleLogout}>
+            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-sm font-bold">{initial}</div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-stone-900 truncate">My Account</p>
+              <p className="text-sm font-medium text-stone-900 truncate">{name}</p>
             </div>
             <LogOut size={16} className="text-stone-400 hover:text-amber-700" />
           </div>
