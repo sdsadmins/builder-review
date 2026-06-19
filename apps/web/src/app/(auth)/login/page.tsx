@@ -4,14 +4,13 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Building2, Mail, Lock, Eye, EyeOff, ArrowRight, User, Shield, Store, Home } from 'lucide-react'
+import { Building2, Mail, Lock, Eye, EyeOff, ArrowRight, User, Shield, Store } from 'lucide-react'
 
 const TEST_USERS = [
-  { role: 'Guest / User', email: 'user@builderreview.in', password: 'Test@1234', icon: User, color: 'text-stone-600', bg: 'bg-stone-50 border-stone-200 hover:bg-stone-100' },
+  { role: 'Registered User', email: 'user@builderreview.in', password: 'Test@1234', icon: User, color: 'text-stone-600', bg: 'bg-stone-50 border-stone-200 hover:bg-stone-100' },
   { role: 'Builder', email: 'builder@builderreview.in', password: 'Test@1234', icon: Building2, color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200 hover:bg-amber-100' },
   { role: 'Vendor', email: 'vendor@builderreview.in', password: 'Test@1234', icon: Store, color: 'text-blue-600', bg: 'bg-blue-50 border-blue-200 hover:bg-blue-100' },
-  { role: 'Moderator', email: 'moderator@builderreview.in', password: 'Test@1234', icon: Shield, color: 'text-purple-600', bg: 'bg-purple-50 border-purple-200 hover:bg-purple-100' },
-  { role: 'Super Admin', email: 'admin@builderreview.in', password: 'Test@1234', icon: Home, color: 'text-red-600', bg: 'bg-red-50 border-red-200 hover:bg-red-100' },
+  { role: 'Super Admin', email: 'admin@builderreview.in', password: 'Test@1234', icon: Shield, color: 'text-red-600', bg: 'bg-red-50 border-red-200 hover:bg-red-100' },
 ]
 
 export default function LoginPage() {

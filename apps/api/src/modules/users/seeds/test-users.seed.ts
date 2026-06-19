@@ -43,13 +43,6 @@ const TEST_USERS: TestUserEntry[] = [
     slug: 'test-vendor',
     roleName: 'vendor',
   },
-  {
-    email: 'moderator@builderreview.in',
-    password: 'Test@1234',
-    name: 'Test Moderator',
-    slug: 'test-moderator',
-    roleName: 'moderator',
-  },
 ];
 
 export async function seedTestUsers(
