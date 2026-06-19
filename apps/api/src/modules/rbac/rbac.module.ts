@@ -41,9 +41,18 @@ export class RBACModule implements OnModuleInit {
     private readonly userModel: Model<User>,
   ) {}
 
-  async onModuleInit(): Promise<void> {
-    await seedPermissions(this.permissionModel);
-    await seedRoles(this.roleModel);
-    await seedTestUsers(this.userModel, this.roleModel, this.userRoleModel);
+  onModuleInit(): void {
+    // Run seeds asynchronously so cold-start latency is not added to the first request
+    void this.runSeeds();
+  }
+
+  private async runSeeds(): Promise<void> {
+    try {
+      await seedPermissions(this.permissionModel);
+      await seedRoles(this.roleModel);
+      await seedTestUsers(this.userModel, this.roleModel, this.userRoleModel);
+    } catch (err) {
+      console.error('[RBACModule] Seed error:', err);
+    }
   }
 }
