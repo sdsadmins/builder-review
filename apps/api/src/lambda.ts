@@ -6,15 +6,22 @@ import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 let cachedApp: express.Express | null = null;
+let initPromise: Promise<express.Express> | null = null;
 
 async function createApp(): Promise<express.Express> {
   if (cachedApp) return cachedApp;
 
   const expressApp = express();
   const adapter = new ExpressAdapter(expressApp);
-  const app = await NestFactory.create(AppModule, adapter, { logger: ['error', 'warn'] });
+  const app = await NestFactory.create(AppModule, adapter, {
+    logger: ['error', 'warn'],
+    bufferLogs: true,
+  });
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  }));
 
   app.enableCors({
     origin: process.env.FRONTEND_URL || '*',
@@ -35,6 +42,20 @@ async function createApp(): Promise<express.Express> {
 }
 
 export default async function handler(req: express.Request, res: express.Response) {
-  const app = await createApp();
-  app(req, res);
+  // Deduplicate concurrent cold-start calls
+  if (!initPromise) {
+    initPromise = createApp().catch(err => {
+      initPromise = null;
+      cachedApp = null;
+      throw err;
+    });
+  }
+
+  try {
+    const app = await initPromise;
+    app(req, res);
+  } catch (err) {
+    console.error('[lambda] Init failed:', err);
+    res.status(500).json({ error: 'Service initialization failed', message: String(err) });
+  }
 }
