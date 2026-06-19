@@ -6,6 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
+import { RBACService } from '../rbac/rbac.service';
 import { RegisterDto } from './dto/register.dto';
 import { UserDocument } from '../users/schemas/user.schema';
 
@@ -21,6 +22,7 @@ export interface AuthResponse extends AuthTokens {
     slug: string;
     avatarUrl?: string;
     isVerified: boolean;
+    roles: string[];
   };
 }
 
@@ -29,6 +31,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly rbacService: RBACService,
   ) {}
 
   async register(dto: RegisterDto): Promise<AuthResponse> {
@@ -79,20 +82,22 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const tokens = await this.generateTokens(
-      (user._id as { toString(): string }).toString(),
-      user.email,
-    );
+    const userId = (user._id as { toString(): string }).toString();
+    const [tokens, roles] = await Promise.all([
+      this.generateTokens(userId, user.email),
+      this.rbacService.getUserRoles(userId),
+    ]);
 
     return {
       ...tokens,
       user: {
-        id: (user._id as { toString(): string }).toString(),
+        id: userId,
         email: user.email,
         name: user.name,
         slug: user.slug,
         avatarUrl: user.avatarUrl,
         isVerified: user.isVerified,
+        roles,
       },
     };
   }

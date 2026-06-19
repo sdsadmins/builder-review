@@ -24,6 +24,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
+  // RBACService is exported from RBACModule which is imported above
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

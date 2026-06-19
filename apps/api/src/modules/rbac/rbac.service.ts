@@ -31,6 +31,18 @@ export class RBACService {
     private readonly userRoleModel: Model<UserRoleDocument>,
   ) {}
 
+  async getUserRoles(userId: string): Promise<string[]> {
+    const userRoles = await this.userRoleModel
+      .find({ userId: new Types.ObjectId(userId) })
+      .populate('roleId')
+      .lean()
+      .exec();
+
+    return userRoles
+      .map((ur) => (ur.roleId as unknown as { name: string })?.name)
+      .filter(Boolean);
+  }
+
   async getUserPermissions(userId: string): Promise<string[]> {
     const cached = this.permissionCache.get(userId);
     if (cached && Date.now() - cached.cachedAt < CACHE_TTL_MS) {
