@@ -1,14 +1,15 @@
 services:
   - type: web
     name: builder-review-api
-    runtime: docker
-    dockerfilePath: ./apps/api/Dockerfile
-    dockerContext: ./apps/api
+    runtime: node
+    rootDir: apps/api
+    buildCommand: npm install && npm run build
+    startCommand: node dist/main
     plan: free
     healthCheckPath: /api/v1/health
     envVars:
       - key: MONGODB_URI
-        value: mongodb+srv://chitboxdev_db_user:95bXXdVGpl6frPzN@cluster0.aqcjcp3.mongodb.net/?appName=Cluster0
+        value: mongodb+srv://chitboxdev_db_user:95bXXdVGpl6frPzN@cluster0.aqcjcp3.mongodb.net/br_app?appName=Cluster0
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -20,6 +21,6 @@ services:
       - key: PORT
         value: 4000
       - key: FRONTEND_URL
-        value: https://builder-review.vercel.app
+        value: https://web-sms-projects-aed5fb1f.vercel.app
       - key: NODE_ENV
         value: production
