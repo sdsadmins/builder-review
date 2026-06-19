@@ -1,7 +1,8 @@
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+// API_URL is a server-side var (not NEXT_PUBLIC_) so it's resolved at runtime, not build time
+const API_URL = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
 export const authOptions: NextAuthOptions = {
   providers: [
