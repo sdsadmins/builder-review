@@ -21,16 +21,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const redirectAfterLogin = async () => {
-    const { getSession } = await import('next-auth/react')
-    const session = await getSession()
-    const roles: string[] = (session?.user as { roles?: string[] })?.roles ?? []
-    if (roles.includes('super_admin') || roles.includes('moderator')) router.push('/admin/dashboard')
-    else if (roles.includes('builder')) router.push('/builder/dashboard')
-    else if (roles.includes('vendor')) router.push('/vendor/dashboard')
-    else router.push('/dashboard')
-  }
-
+  // Middleware handles role-based redirect — just push to /dashboard and it redirects
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -38,7 +29,7 @@ export default function LoginPage() {
     const res = await signIn('credentials', { email, password, redirect: false })
     setLoading(false)
     if (res?.error) setError('Invalid email or password')
-    else await redirectAfterLogin()
+    else router.push('/dashboard')
   }
 
   const loginAs = async (testEmail: string, testPassword: string) => {
@@ -47,7 +38,7 @@ export default function LoginPage() {
     const res = await signIn('credentials', { email: testEmail, password: testPassword, redirect: false })
     setLoading(false)
     if (res?.error) setError('Could not sign in with test account')
-    else await redirectAfterLogin()
+    else router.push('/dashboard')
   }
 
   return (
