@@ -72,6 +72,7 @@ export class AuthService {
         slug: user.slug,
         avatarUrl: user.avatarUrl,
         isVerified: user.isVerified,
+        roles: [],
       },
     };
   }
